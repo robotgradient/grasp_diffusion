@@ -1,0 +1,10 @@
+numpy
+theseus-ai
+tqdm
+configargparse
+h5py
+pyglet
+trimesh
+matplotlib
+torchvision
+tensorboard

@@ -1,0 +1,61 @@
+{
+  "Description" : [ "This experiment trains jointly an SDF model and a SE(3) Grasp Energy" ],
+  "exp_log_dir": "train_graspdif",
+  "single_object": false,
+  "TrainSpecs": {
+    "batch_size": 2,
+    "num_epochs": 90000,
+    "steps_til_summary": 500,
+    "iters_til_checkpoint": 1000,
+    "epochs_til_checkpoint": 10
+  },
+  "NetworkArch" : "GraspDiffusion",
+  "NetworkSpecs" : {
+    "feature_encoder": {
+      "enc_dim": 128,
+      "in_dim": 3,
+      "out_dim": 7,
+      "dims" : [ 512, 512, 512, 512, 512, 512, 512, 512],
+      "dropout" : [0, 1, 2, 3, 4, 5, 6, 7],
+      "dropout_prob" : 0.2,
+      "norm_layers" : [0, 1, 2, 3, 4, 5, 6, 7],
+      "latent_in" : [4],
+      "xyz_in_all" : false,
+      "use_tanh" : false,
+      "latent_dropout" : false,
+      "weight_norm" : true
+    },
+    "latent_codes": {
+      "latent_size": 128,
+      "num_scenes": 101
+    },
+    "points": {
+      "n_points": 30,
+      "loc": [0.0, 0.0, 0.5],
+      "scale": [0.7, 0.5, 0.7]
+    },
+    "decoder": {
+      "hidden_dim": 512
+    }
+    },
+  "LearningRateSchedule" : [
+    {
+      "Type" : "Step",
+      "Initial" : 0.0005,
+      "Interval" : 500,
+      "Factor" : 0.5
+    },
+    {
+      "Type" : "Step",
+      "Initial" : 0.001,
+      "Interval" : 500,
+      "Factor" : 0.5
+    },
+    {
+      "Type" : "Step",
+      "Initial" : 0.001,
+      "Interval" : 500,
+      "Factor" : 0.5
+    }],
+  "Losses": ["denoising_loss"]
+}

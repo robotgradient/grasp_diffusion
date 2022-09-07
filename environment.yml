@@ -1,0 +1,10 @@
+name: se3dif_env
+channels:
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.7
+  - numpy
+  - pytorch
+  - torchvision
+  - torchaudio
