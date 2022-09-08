@@ -39,7 +39,9 @@ Generate SE(3) grasp poses
 python scripts/sample/generate_pointcloud_6d_grasp_poses.py --n_poses 10 --n_obj 0
 ```
 
+### Contact
 
+If you have any questions or find any bugs, please let me know: [Julen Urain](http://robotgradient.com/) julen[at]robot-learning[dot]de
 
 ## References
 
