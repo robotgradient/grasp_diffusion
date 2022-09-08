@@ -4,7 +4,7 @@ This library provides the tools for training and sampling diffusion models in SE
 implemented in PyTorch. 
 We apply them to learn 6D grasp distributions. We use the learned distribution as cost function
 for grasp and motion optimization problems.
-See reference [1] for additional details. See the [website](https://sites.google.com/view/se3dif/home) of the project
+See reference [1] for additional details. See the [website](https://sites.google.com/view/se3dif/home) of the project.
 
 <img src="assets/grasp_diffusion.gif" alt="diffusion" style="width:200px;"/><img src="assets/grasp_diffusion_01.gif" alt="diffusion" style="width:200px;"/><img src="assets/grasp_diffusion_02.gif" alt="diffusion" style="width:200px;"/><img src="assets/grasp_diffusion_03.gif" alt="diffusion" style="width:200px;"/>
 
