@@ -52,7 +52,7 @@ joint grasp and motion optimization through diffusion"
 @article{urain2022se3dif,
   title={Learning cost functions for joint grasp and motion optimization through diffusion},
   author={Urain, Julen and Funk, Niklas and Chalvatzaki, Georgia and Peters, Jan},
-  journal={Under Review},
+  journal={https://arxiv.org/pdf/2209.03855.pdf},
   year={2022}
 ```
 
