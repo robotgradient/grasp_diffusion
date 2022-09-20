@@ -45,14 +45,13 @@ python scripts/sample/generate_pointcloud_6d_grasp_poses.py --n_poses 10 --n_obj
 ## References
 
 [1] Julen Urain*, Niklas Funk*, Georgia Chalvatzaki, Jan Peters. 
-"SE(3)-DiffusionFields: Learning cost functions for
-joint grasp and motion optimization through diffusion" 
+"SE(3)-DiffusionFields: Learning smooth cost functions for joint grasp and motion optimization through diffusion" 
 *Under review* 2022.
 [[arxiv]](https://arxiv.org/pdf/2209.03855.pdf)
 
 ```
 @article{urain2022se3dif,
-  title={Learning cost functions for joint grasp and motion optimization through diffusion},
+  title={SE(3)-DiffusionFields: Learning smooth cost functions for joint grasp and motion optimization through diffusion},
   author={Urain, Julen and Funk, Niklas and Chalvatzaki, Georgia and Peters, Jan},
   journal={https://arxiv.org/pdf/2209.03855.pdf},
   year={2022}
