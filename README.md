@@ -24,13 +24,18 @@ conda activate se3dif_env && pip install -e .
 
 ## Preproccessed Acronym [2] and Shapenet dataset [3]
 
-Download the preprocessed dataset and unzip the folder in the before the root directory 
+We define the source of the dataset and trained models in ```se3dif/utils/diretcory_utils.py```
+Originally, the data root folder is set in the folder in which the repository is (one folder before the repository). 
+Nevertheless, you can change it by changing ```root_directory``` and  ```root_directory``` in ```se3dif/utils/diretcory_utils.py```.
+
+
+Download the preprocessed dataset and unzip the folder in the before the ```root_directory```
 1. Mugs (Grasps, Meshes, SDF, Pointcloud) [data](https://drive.google.com/file/d/1fURx7bTutANvOFvbKeo8XahT-R3A_vxH/view?usp=sharing)
 
 
 ## Trained Models
 
-Download the trained models and unzip the folder in the before the root directory
+Download the trained models and unzip the folder in the before the ```root_directory```
 1. Pointcloud conditioned SE(3) GraspDiffusion model [PointGraspDif](https://drive.google.com/file/d/1Y0ZWAhs0GSL7A-J3yA7ts3N8TnQTGHon/view?usp=sharing)
 
 
@@ -38,7 +43,19 @@ Download the trained models and unzip the folder in the before the root director
 
 Generate SE(3) grasp poses 
 ```azure
-python scripts/sample/generate_pointcloud_6d_grasp_poses.py --n_poses 10 --n_obj 0
+python scripts/sample/generate_6d_grasp_poses.py --n_grasps 10 --obj_id 15
+```
+
+## Train a new model
+
+Train no-pointcloud model
+```azure
+python scripts/train/train_6d_grasp_diffusion.py
+```
+
+Train pointcloud conditioned model
+```azure
+python scripts/train/train_pointcloud_6d_grasp_diffusion.py
 ```
 
 
