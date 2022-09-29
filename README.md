@@ -24,9 +24,9 @@ conda activate se3dif_env && pip install -e .
 
 ## Preproccessed Acronym [2] and Shapenet dataset [3]
 
-We define the source of the dataset and trained models in ```se3dif/utils/diretcory_utils.py```
+We define the source of the dataset and trained models in ```se3dif/utils/directory_utils.py```
 Originally, the data root folder is set in the folder in which the repository is (one folder before the repository). 
-Nevertheless, you can change it by changing ```root_directory``` and  ```root_directory``` in ```se3dif/utils/diretcory_utils.py```.
+Nevertheless, you can change it by changing ```root_directory``` and  ```root_directory``` in ```se3dif/utils/directory_utils.py```.
 
 
 Download the preprocessed dataset and unzip the folder in the before the ```root_directory```
