@@ -13,7 +13,7 @@ def parse_args():
     p = configargparse.ArgumentParser()
     p.add('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
 
-    p.add_argument('--obj_id', type=str, default='1')
+    p.add_argument('--obj_id', type=str, default='10')
     p.add_argument('--n_grasps', type=str, default='200')
 
     opt = p.parse_args()
