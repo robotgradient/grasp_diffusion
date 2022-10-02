@@ -40,9 +40,6 @@ and download
 
 ## Trained Models
 
-Download the trained models and unzip the folder in the before the ```root_directory```
-
-
 In the base folder of the repository
 
 ```python
@@ -53,7 +50,8 @@ git lfs install
 git clone  https://huggingface.co/camusean/grasp_diffusion point_graspdif
 ```
 
-Alternatively, you can download from Google Drive
+Alternatively, Download the trained models and unzip the folder in the before the ```root_directory```.
+You can download from Google Drive
 1. Pointcloud conditioned SE(3) GraspDiffusion model [PointGraspDif](https://drive.google.com/file/d/1Y0ZWAhs0GSL7A-J3yA7ts3N8TnQTGHon/view?usp=sharing)
 
 
