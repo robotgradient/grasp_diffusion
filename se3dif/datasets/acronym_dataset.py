@@ -65,23 +65,18 @@ class AcronymGrasps():
         return T, success
 
     def load_mesh(self):
-        mesh_dir = os.path.join(get_data_src(), 'acronym', 'meshes')
-        try:
-            mesh_path_dir = os.path.join(mesh_dir, self.mesh_type, self.mesh_id)
-            mesh_path_file = os.path.join(mesh_path_dir, 'mesh.obj')
-            mesh = trimesh.load_mesh(mesh_path_file)
-        except:
-            mesh_path_dir = os.path.join(mesh_dir, self.mesh_type, self.mesh_id+'.obj')
-            mesh_path_file = os.path.join(mesh_path_dir, self.mesh_id+'.obj')
-            mesh = trimesh.load_mesh(mesh_path_file)
+        mesh_path_file = os.path.join(get_data_src(), self.mesh_fname)
+        mesh = trimesh.load_mesh(mesh_path_file)
         mesh.apply_scale(self.mesh_scale)
+        if type(mesh) == trimesh.scene.scene.Scene:
+            mesh = trimesh.util.concatenate(mesh.dump())
         return mesh
 
 
 class AcronymGraspsDirectory():
     def __init__(self, filename=get_grasps_src(), data_type='Mug'):
 
-        grasps_files = sorted(glob.glob(filename + '/' + data_type + '*.h5'))
+        grasps_files = sorted(glob.glob(filename + '/' + data_type + '/*.h5'))
         self.avail_obj = []
         for grasp_file in grasps_files:
             self.avail_obj.append(AcronymGrasps(grasp_file))
@@ -257,56 +252,34 @@ class AcronymAndSDFDataset(Dataset):
 
 class PointcloudAcronymAndSDFDataset(Dataset):
     'DataLoader for training DeepSDF with a Rotation Invariant Encoder model'
-    def __init__(self, class_type='Mug', se3=False, phase='train', one_object=False,
+    def __init__(self, class_type=['Cup', 'Mug', 'Fork', 'Hat'], se3=False, phase='train', one_object=False,
                  n_pointcloud = 1000, n_density = 200, n_coords = 1000,
                  augmented_rotation=True, visualize=False, split = True):
 
         self.class_type = class_type
         self.data_dir = get_data_src()
-        self.acronym_data_dir = os.path.join(self.data_dir, 'acronym')
 
-        self.grasps_dir = os.path.join(self.acronym_data_dir, 'grasps')
-        self.sdf_dir = os.path.join(self.acronym_data_dir, 'sdf')
+        self.grasps_dir = os.path.join(self.data_dir, 'grasps')
 
-        self.generated_points_dir = os.path.join(self.acronym_data_dir, 'train_data')
+        self.grasp_files = []
+        for class_type_i in class_type:
+            cls_grasps_files = sorted(glob.glob(self.grasps_dir+'/'+class_type_i+'/*.h5'))
 
-        grasps_files = sorted(glob.glob(self.grasps_dir+'/'+class_type+'*.h5'))
+            for grasp_file in cls_grasps_files:
+                g_obj = AcronymGrasps(grasp_file)
+                mesh_filename = g_obj.mesh_fname
 
-        points_files = []
-        sdf_files = []
-        for grasp_file in grasps_files:
-            g_obj = AcronymGrasps(grasp_file)
-            mesh_file = g_obj.mesh_fname
-            txt_split = mesh_file.split('/')
-
-            sdf_file = os.path.join(self.sdf_dir, class_type, txt_split[-1].split('.')[0]+'.json')
-            point_file = os.path.join(self.generated_points_dir, class_type, '4_points', txt_split[-1]+'.npz')
-
-            sdf_files.append(sdf_file)
-            points_files.append(point_file)
+                ## Grasp File ##
+                self.grasp_files.append(grasp_file)
 
         ## Split Train/Validation
-        n = len(grasps_files)
-        indexes = np.arange(0, n)
-        self.total_len = n
-        if split:
-            idx = int(0.99 * n)
-        else:
-            idx = int(n)
+        n = len(self.grasp_files)
+        train_size = int(n*0.9)
+        test_size  =  n - train_size
 
-        if phase == 'train':
-            self.grasp_files = grasps_files[:idx]
-            self.points_files = points_files[:idx]
-            self.sdf_files = sdf_files[:idx]
-            self.indexes = indexes[:idx]
-        else:
-            self.grasp_files = grasps_files[idx:]
-            self.points_files = points_files[idx:]
-            self.sdf_files = sdf_files[idx:]
-            self.indexes = indexes[idx:]
+        self.train_grasp_files, self.test_grasp_files = torch.utils.data.random_split(self.grasp_files, [train_size, test_size])
 
-
-        self.len = len(self.points_files)
+        self.len = len(self.train_grasp_files)
 
         self.n_pointcloud = n_pointcloud
         self.n_density  = n_density
@@ -324,84 +297,64 @@ class PointcloudAcronymAndSDFDataset(Dataset):
     def __len__(self):
         return self.len
 
+    def _get_grasps(self, grasp_obj):
+        rix = np.random.randint(low=0, high=grasp_obj.good_grasps.shape[0], size=self.n_density)
+        H_grasps = grasp_obj.good_grasps[rix, ...]
+        return H_grasps
+
+    def _get_sdf(self, grasp_obj, grasp_file):
+
+        mesh_type = grasp_file.split('/')[-2]
+        filename  = grasp_file.split('/')[-1].split('.')[0]
+        sdf_file = os.path.join(self.data_dir, 'sdf', mesh_type, filename+'.json')
+
+        with open(sdf_file, 'rb') as handle:
+            sdf_dict = pickle.load(handle)
+
+        xyz = sdf_dict['xyz']
+        rix = np.random.permutation(xyz.shape[0])
+        xyz = xyz[rix[:self.n_occ], :]
+        sdf = sdf_dict['sdf'][rix[:self.n_occ]]
+        return xyz, sdf
+
+    def _get_mesh_pcl(self, grasp_obj):
+        mesh = grasp_obj.load_mesh()
+        return mesh.sample(self.n_pointcloud)
+
     def _get_item(self, index):
         if self.one_object:
             index = 0
 
-        index_obj = self.indexes[index]
         ## Load Files ##
-        grasps_obj = AcronymGrasps(self.grasp_files[index])
-        sdf_file = self.sdf_files[index]
-        with open(sdf_file, 'rb') as handle:
-            sdf_dict = pickle.load(handle)
+        grasps_obj = AcronymGrasps(self.train_grasp_files[index])
+
+        ## SDF
+        xyz, sdf = self._get_sdf(grasps_obj, self.train_grasp_files[index])
 
         ## PointCloud
-        p_clouds_all = sdf_dict['pcl']
-        rix = np.random.permutation(p_clouds_all.shape[0])
-        self.n_pointcloud = 1000
-        p_clouds = p_clouds_all[rix[:self.n_pointcloud],:]
-
-        ## Test ##
-        # mesh = grasps_obj.load_mesh()
-        #
-        # p_test = mesh.sample(1000)
-        #
-        # p_test = p_test*self.scale
-        # p_test_mean = np.mean(p_test, 0)
-        # p_test = p_test - p_test_mean
-        # print('p_test_mean: {}'.format(p_test_mean))
-
-
-        ## Coordinates XYZ
-        coords  = sdf_dict['xyz']
-        rix = np.random.permutation(coords.shape[0])
-        coords = coords[rix[:self.n_occ],:]
-
-        ### SDF value
-        sdf = sdf_dict['sdf'][rix[:self.n_occ]]
-        grad_sdf = sdf_dict['grad_sdf'][rix[:self.n_occ], ...]
-
-        ### Scale and Loc
-        scale = sdf_dict['scale']
-        loc = sdf_dict['loc']
+        pcl = self._get_mesh_pcl(grasps_obj)
 
         ## Grasps good/bad
-        rix = np.random.randint(low=0, high=grasps_obj.good_grasps.shape[0], size=self.n_density)
-        H_grasps = grasps_obj.good_grasps[rix, ...]
-        rix = np.random.randint(low=0, high=grasps_obj.bad_grasps.shape[0], size=self.n_density)
-        H_bad_grasps = grasps_obj.bad_grasps[rix, ...]
+        H_grasps = self._get_grasps(grasps_obj)
 
-        ## Rescale Pointcloud and Occupancy Points ##
-        coords = (coords + loc)*scale*grasps_obj.mesh_scale * self.scale
-        p_clouds = (p_clouds + loc)*scale*grasps_obj.mesh_scale * self.scale
-
-        sdf = sdf*scale*grasps_obj.mesh_scale * self.scale
-        grad_sdf = -grad_sdf*scale*grasps_obj.mesh_scale * self.scale
-
-        H_grasps[:,:-1,-1] = H_grasps[:,:-1,-1] * self.scale
-        H_bad_grasps[:,:-1,-1] = H_bad_grasps[:,:-1,-1]*self.scale
-
+        ## rescale, rotate and translate ##
+        xyz = xyz*self.scale
+        sdf = sdf*self.scale
+        pcl = pcl*self.scale
+        H_grasps[..., :3, -1] = H_grasps[..., :3, -1]*self.scale
         ## Random rotation ##
-
         R = special_ortho_group.rvs(3)
         H = np.eye(4)
-        H[:3,:3] = R
-
-        ## Center and Rotate ##
-        p_mean = np.mean(p_clouds, 0)
-        if self.augmented_rotation:
-            p_clouds = p_clouds - p_mean
-            p_clouds = np.einsum('mn,bn->bm',R, p_clouds)
-
-            coords = coords - p_mean
-            coords = np.einsum('mn,bn->bm',R, coords)
-
-            H_grasps[..., :3, -1] = H_grasps[..., :3, -1] - p_mean
-            H_grasps = np.einsum('mn,bnk->bmk', H, H_grasps)
-
-            H_bad_grasps[..., :3, -1] = H_bad_grasps[..., :3, -1] - p_mean
-            H_bad_grasps = np.einsum('mn,bnk->bmk', H, H_bad_grasps)
-
+        H[:3, :3] = R
+        mean = np.mean(pcl, 0)
+        ## translate ##
+        xyz = xyz - mean
+        pcl = pcl - mean
+        H_grasps[..., :3, -1] = H_grasps[..., :3, -1] - mean
+        ## rotate ##
+        pcl = np.einsum('mn,bn->bm',R, pcl)
+        xyz = np.einsum('mn,bn->bm',R, xyz)
+        H_grasps = np.einsum('mn,bnk->bmk', H, H_grasps)
         #######################
 
         # Visualize
@@ -412,18 +365,15 @@ class PointcloudAcronymAndSDFDataset(Dataset):
 
             fig = plt.figure()
             ax = fig.add_subplot(projection='3d')
-            ax.scatter(p_clouds[:,0], p_clouds[:,1], p_clouds[:,2], c='r')
+            ax.scatter(pcl[:,0], pcl[:,1], pcl[:,2], c='r')
 
             x_grasps = H_grasps[..., :3, -1]
             ax.scatter(x_grasps[:,0], x_grasps[:,1], x_grasps[:,2], c='b')
 
-            n = 10
-            x = coords[:n,:]
-            ## grad sdf ##
-            x_grad = grad_sdf[:n, :]
-            ax.quiver(x[:,0], x[:,1], x[:,2], x_grad[:,0], x_grad[:,1], x_grad[:,2], length=0.3)
-
             ## sdf visualization ##
+            n = 100
+            x = xyz[:n,:]
+
             x_sdf = sdf[:n]
             x_sdf = 0.9*x_sdf/np.max(x_sdf)
             c = np.zeros((n, 3))
@@ -432,15 +382,12 @@ class PointcloudAcronymAndSDFDataset(Dataset):
 
             plt.show(block=True)
 
-        del sdf_dict
-
-        res = {'visual_context': torch.from_numpy(p_clouds).float(),
-               'x_sdf': torch.from_numpy(coords).float(),
+        res = {'visual_context': torch.from_numpy(pcl).float(),
+               'x_sdf': torch.from_numpy(xyz).float(),
                'x_ene_pos': torch.from_numpy(H_grasps).float(),
-               'x_neg_ene': torch.from_numpy(H_bad_grasps).float(),
                'scale': torch.Tensor([self.scale]).float()}
 
-        return res, {'sdf': torch.from_numpy(sdf).float(), 'grad_sdf': torch.from_numpy(grad_sdf).float()}
+        return res, {'sdf': torch.from_numpy(sdf).float()}
 
     def __getitem__(self, index):
         'Generates one sample of data'
@@ -454,7 +401,7 @@ if __name__ == '__main__':
     dataset = AcronymAndSDFDataset(visualize=True, augmented_rotation=True, one_object=False)
 
     ## Pointcloud conditioned dataset
-    dataset = PointcloudAcronymAndSDFDataset(visualize=True, augmented_rotation=True, one_object=True)
+    dataset = PointcloudAcronymAndSDFDataset(visualize=False, augmented_rotation=True, one_object=False)
 
     train_dataloader = DataLoader(dataset, batch_size=2, shuffle=True)
     for x,y in train_dataloader:

@@ -8,4 +8,4 @@ trimesh
 matplotlib
 torchvision
 tensorboard
-huggingface_hub
+mesh_to_sdf

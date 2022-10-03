@@ -21,7 +21,7 @@ def get_data_src():
 
 
 def get_grasps_src():
-    directory = osp.join(get_data_src(), 'acronym/grasps')
+    directory = osp.join(get_data_src(), 'grasps')
     return directory
 
 
