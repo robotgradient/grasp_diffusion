@@ -7,13 +7,16 @@ from se3dif.samplers import ApproximatedGrasp_AnnealedLD, Grasp_AnnealedLD
 from se3dif.utils import to_numpy, to_torch
 import configargparse
 
+
+from mesh_to_sdf.surface_point_cloud import get_scan_view, get_hq_scan_view
+
 device = 'cpu'
 
 def parse_args():
     p = configargparse.ArgumentParser()
     p.add('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
 
-    p.add_argument('--obj_id', type=str, default='32')
+    p.add_argument('--obj_id', type=str, default='0')
     p.add_argument('--n_grasps', type=str, default='200')
     p.add_argument('--obj_class', type=str, default='Mug')
 
@@ -46,7 +49,8 @@ def sample_pointcloud(obj_id=0, obj_class='Mug'):
     acronym_grasps = AcronymGraspsDirectory(data_type=obj_class)
     mesh = acronym_grasps.avail_obj[obj_id].load_mesh()
 
-    P = mesh.sample(1000)
+    P = get_hq_scan_view(mesh, bounding_radius=1)
+
     P *= 8.
     P_mean = np.mean(P, 0)
     P += -P_mean
@@ -92,5 +96,5 @@ if __name__ == '__main__':
     vis_H = H.squeeze()
     P *=1/8
     mesh = mesh.apply_scale(1/8)
-    grasp_visualization.visualize_grasps(to_numpy(H), p_cloud=P, mesh=mesh)
+    grasp_visualization.visualize_grasps(to_numpy(H), p_cloud=P)#, mesh=mesh)
 

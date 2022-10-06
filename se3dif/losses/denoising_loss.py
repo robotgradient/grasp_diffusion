@@ -36,12 +36,13 @@ class ProjectedSE3DenoisingLoss():
         perturbed_x = xw + z * std[..., None]
         perturbed_x = perturbed_x.detach()
         perturbed_x.requires_grad_(True)
-        perturbed_H = SO3_R3().exp_map(perturbed_x).to_matrix()
 
         ## Get gradient ##
-        energy = model(perturbed_H, random_t)
-        grad_energy = torch.autograd.grad(energy.sum(), perturbed_x,
-                                          only_inputs=True, retain_graph=True, create_graph=True)[0]
+        with torch.set_grad_enabled(True):
+            perturbed_H = SO3_R3().exp_map(perturbed_x).to_matrix()
+            energy = model(perturbed_H, random_t)
+            grad_energy = torch.autograd.grad(energy.sum(), perturbed_x,
+                                              only_inputs=True, retain_graph=True, create_graph=True)[0]
 
         # Compute L1 loss
         z_target = z/std[...,None]

@@ -24,7 +24,7 @@ def parse_args():
     p.add_argument('--specs_file_dir', type=str, default=os.path.join(base_dir, 'params')
                    , help='root for saving logging')
 
-    p.add_argument('--spec_file', type=str, default='multiobject_p_graspdif'
+    p.add_argument('--spec_file', type=str, default='multiobject_partialp_graspdif'
                    , help='root for saving logging')
 
     p.add_argument('--summary', type=bool, default=True
@@ -65,7 +65,7 @@ def main(opt):
         device = torch.device('cpu')
 
     ## Dataset
-    train_dataset = datasets.PointcloudAcronymAndSDFDataset(augmented_rotation=True, one_object=args['single_object'])
+    train_dataset = datasets.PartialPointcloudAcronymAndSDFDataset(augmented_rotation=True, one_object=args['single_object'])
     train_dataloader = DataLoader(train_dataset, batch_size=args['TrainSpecs']['batch_size'], shuffle=True, drop_last=True)
     test_dataset = copy.deepcopy(train_dataset)
     test_dataset.set_test_data()
