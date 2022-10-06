@@ -19,6 +19,9 @@ from mesh_to_sdf.surface_point_cloud import get_scan_view, get_hq_scan_view
 
 import os, sys
 
+
+os.environ["PYOPENGL_PLATFORM"] = "egl"
+
 import logging
 logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
@@ -601,7 +604,7 @@ if __name__ == '__main__':
     dataset = PointcloudAcronymAndSDFDataset(visualize=True, augmented_rotation=True, one_object=False)
 
     ## Pointcloud conditioned dataset
-    dataset = PartialPointcloudAcronymAndSDFDataset(visualize=True, augmented_rotation=True, one_object=False)
+    dataset = PartialPointcloudAcronymAndSDFDataset(visualize=False, augmented_rotation=True, one_object=False)
 
     train_dataloader = DataLoader(dataset, batch_size=10, shuffle=True)
     for x,y in train_dataloader:

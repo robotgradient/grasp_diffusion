@@ -27,7 +27,7 @@ def parse_args():
     p.add_argument('--spec_file', type=str, default='multiobject_p_graspdif'
                    , help='root for saving logging')
 
-    p.add_argument('--summary', type=bool, default=True
+    p.add_argument('--summary', type=bool, default=False
                    , help='activate or deactivate summary')
 
     p.add_argument('--saving_root', type=str, default=os.path.join(get_root_src(), 'logs')
