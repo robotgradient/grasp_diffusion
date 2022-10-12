@@ -23,13 +23,15 @@ def parse_args():
     p.add_argument('--obj_id', type=str, default='0')
     p.add_argument('--n_grasps', type=str, default='200')
     p.add_argument('--obj_class', type=str, default='Laptop')
+    p.add_argument('--model', type=str, default='grasp_dif_multi')
+
 
     opt = p.parse_args()
     return opt
 
 
-def get_approximated_grasp_diffusion_field(p, device='cpu'):
-    model_params = 'grasp_dif_multi'
+def get_approximated_grasp_diffusion_field(p, args, device='cpu'):
+    model_params = args.model
     batch = 10
     ## Load model
     model_args = {
@@ -86,7 +88,7 @@ if __name__ == '__main__':
 
     ## Set Model and Sample Generator ##
     P, mesh = sample_pointcloud(obj_id, obj_class)
-    generator, model = get_approximated_grasp_diffusion_field(P, device)
+    generator, model = get_approximated_grasp_diffusion_field(P, args, device)
 
     H = generator.sample()
     H[..., :3, -1] *=1/8.

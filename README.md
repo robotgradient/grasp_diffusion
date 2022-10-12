@@ -72,6 +72,11 @@ Sample given the whole object pointcloud
 python scripts/sample/generate_pointcloud_6d_grasp_poses.py --n_grasps 10 --obj_id 0 --obj_class 'ScrewDriver'
 ```
 
+Sample given a mug-specialized model
+```azure
+python scripts/sample/generate_pointcloud_6d_grasp_poses.py --n_grasps 10 --obj_id 10 --obj_class 'Mug' --model 'grasp_dif_mugs'
+```
+
 Sample given a partial pointcloud
 ```azure
 python scripts/sample/generate_partial_pointcloud_6d_grasp_poses.py --n_grasps 10 --obj_id 12 --obj_class 'Mug'
