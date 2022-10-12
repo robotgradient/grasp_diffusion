@@ -50,7 +50,7 @@ root
 │   │   │ graspdif_model_0
 │   │   │ graspdif_model_1
 │ 
-└─── grasp_diffusion
+└─── grasp_diffusion (repository)
 ```
 
 ## Trained Models
