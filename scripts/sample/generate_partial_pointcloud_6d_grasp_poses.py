@@ -15,16 +15,16 @@ def parse_args():
     p = configargparse.ArgumentParser()
     p.add('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
 
-    p.add_argument('--obj_id', type=str, default='1')
-    p.add_argument('--n_grasps', type=str, default='200')
-    p.add_argument('--obj_class', type=str, default='Cup')
+    p.add_argument('--obj_id', type=str, default='12')
+    p.add_argument('--n_grasps', type=str, default='10')
+    p.add_argument('--obj_class', type=str, default='Mug')
 
     opt = p.parse_args()
     return opt
 
 
 def get_approximated_grasp_diffusion_field(p, device='cpu'):
-    model_params = 'multiobject_partialp_graspdif'
+    model_params = 'partial_grasp_dif'
     batch = 10
     ## Load model
     model_args = {

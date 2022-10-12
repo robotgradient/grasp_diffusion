@@ -20,8 +20,14 @@ Activate the environment and install the library
 ```python
 conda activate se3dif_env && pip install -e .
 ```
+Install ```mesh_to_sdf```
+```python
+git clone https://github.com/TheCamusean/mesh_to_sdf
+cd mesh_to_sdf && pip install -e .
+```
 
-## Preproccessed Acronym [2] and Shapenet dataset [3]
+## Processed Data
+#### (Based on Acronym [2] and Shapenet dataset [3])
 
 We define the source of the dataset and trained models in ```se3dif/utils/directory_utils.py```
 Originally, the data root folder is set in the folder in which the repository is (one folder before the repository). 
@@ -46,11 +52,16 @@ git lfs install
 git clone  https://huggingface.co/camusean/grasp_diffusion models
 ```
 
-## Sample examples
+## Sample Grasps
 
-Generate SE(3) grasp poses 
+Sample given the whole object pointcloud
 ```azure
-python scripts/sample/generate_pointcloud_6d_grasp_poses.py --n_grasps 10 --obj_id 15
+python scripts/sample/generate_pointcloud_6d_grasp_poses.py --n_grasps 10 --obj_id 0 --obj_class 'ScrewDriver'
+```
+
+Sample given a partial pointcloud
+```azure
+python scripts/sample/generate_partial_pointcloud_6d_grasp_poses.py --n_grasps 10 --obj_id 12 --obj_class 'Mug'
 ```
 
 ## Train a new model
@@ -65,6 +76,10 @@ Train pointcloud conditioned model
 python scripts/train/train_pointcloud_6d_grasp_diffusion.py
 ```
 
+Train partial pointcloud conditioned model
+```azure
+python scripts/train/train_partial_pointcloud_6d_grasp_diffusion.py
+```
 
 ## References
 

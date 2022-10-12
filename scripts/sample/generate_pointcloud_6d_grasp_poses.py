@@ -9,13 +9,20 @@ import configargparse
 
 device = 'cpu'
 
+# Object Classes :['Cup', 'Mug', 'Fork', 'Hat', 'Bottle', 'Bowl', 'Car', 'Donut', 'Laptop', 'MousePad', 'Pencil',
+# 'Plate', 'ScrewDriver', 'WineBottle','Backpack', 'Bag', 'Banana', 'Battery', 'BeanBag', 'Bear',
+# 'Book', 'Books', 'Camera','CerealBox', 'Cookie','Hammer', 'Hanger', 'Knife', 'MilkCarton', 'Painting',
+# 'PillBottle', 'Plant','PowerSocket', 'PowerStrip', 'PS3', 'PSP', 'Ring', 'Scissors', 'Shampoo', 'Shoes',
+# 'Sheep', 'Shower', 'Sink', 'SoapBottle', 'SodaCan','Spoon', 'Statue', 'Teacup', 'Teapot', 'ToiletPaper',
+# 'ToyFigure', 'Wallet','WineGlass','Cow', 'Sheep', 'Cat', 'Dog', 'Pizza', 'Elephant', 'Donkey', 'RubiksCube', 'Tank', 'Truck', 'USBStick']
+
 def parse_args():
     p = configargparse.ArgumentParser()
     p.add('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
 
     p.add_argument('--obj_id', type=str, default='0')
     p.add_argument('--n_grasps', type=str, default='200')
-    p.add_argument('--obj_class', type=str, default='ScrewDriver')
+    p.add_argument('--obj_class', type=str, default='Laptop')
 
     opt = p.parse_args()
     return opt
@@ -35,7 +42,7 @@ def get_approximated_grasp_diffusion_field(p, device='cpu'):
     model.set_latent(context, batch=batch)
 
     ########### 2. SET SAMPLING METHOD #############
-    generator = Grasp_AnnealedLD(model, batch=batch, T=70, T_fit=50, k_steps=1)
+    generator = Grasp_AnnealedLD(model, batch=batch, T=70, T_fit=50, k_steps=2)
 
     return generator, model
 
