@@ -25,19 +25,11 @@ Clone https://github.com/TheCamusean/mesh_to_sdf and install
 pip install -e .
 ```
 
-## Processed Data
-#### (Based on Acronym [2] and Shapenet dataset [3])
+## Download Data and Trained Models
 
 We define the source of the dataset and trained models in ```se3dif/utils/directory_utils.py```
 Originally, the data root folder is set in the folder in which the repository is (one folder before the repository). 
-Nevertheless, you can change it by changing ```root_directory``` in ```se3dif/utils/diretcory_utils.py```.
-
-We provide indications on how to prepare the training dataset in ```scripts/create_data```.
-
-
-The already prepared data can be downloaded by
-```cd ..```
-and download [data](https://drive.google.com/drive/folders/1ULWuYZYyFncIBqBhRMNrVOrosGGRITZU?usp=sharing).
+Nevertheless, you can change it by changing ```root_directory``` in ```se3dif/utils/directory_utils.py```.
 
 ```
 root
@@ -52,7 +44,17 @@ root
 └─── grasp_diffusion (repository)
 ```
 
-## Trained Models
+### Processed Data
+#### (Based on Acronym [2] and Shapenet dataset [3])
+We provide indications on how to prepare the training 
+dataset in ```scripts/create_data```.
+
+
+The already prepared data can be downloaded by
+```cd ..```
+and download [data](https://drive.google.com/drive/folders/1ULWuYZYyFncIBqBhRMNrVOrosGGRITZU?usp=sharing).
+
+### Trained Models
 
 In the base folder of the repository
 
