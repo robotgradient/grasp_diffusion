@@ -67,8 +67,8 @@ def main(opt):
     ## Dataset
     train_dataset = datasets.PartialPointcloudAcronymAndSDFDataset(augmented_rotation=True, one_object=args['single_object'])
     train_dataloader = DataLoader(train_dataset, batch_size=args['TrainSpecs']['batch_size'], shuffle=True, drop_last=True)
-    test_dataset = copy.deepcopy(train_dataset)
-    test_dataset.set_test_data()
+    test_dataset = datasets.PartialPointcloudAcronymAndSDFDataset(augmented_rotation=True, one_object=args['single_object'],
+                                                                  test_files=train_dataset.test_grasp_files)
     test_dataloader = DataLoader(test_dataset, batch_size=args['TrainSpecs']['batch_size'], shuffle=True, drop_last=True)
 
     ## Model

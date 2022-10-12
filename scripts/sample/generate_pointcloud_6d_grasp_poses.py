@@ -13,17 +13,16 @@ def parse_args():
     p = configargparse.ArgumentParser()
     p.add('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
 
-    p.add_argument('--obj_id', type=str, default='32')
+    p.add_argument('--obj_id', type=str, default='0')
     p.add_argument('--n_grasps', type=str, default='200')
-    p.add_argument('--obj_class', type=str, default='Mug')
+    p.add_argument('--obj_class', type=str, default='ScrewDriver')
 
     opt = p.parse_args()
     return opt
 
 
 def get_approximated_grasp_diffusion_field(p, device='cpu'):
-    model_params = 'point_graspdif'
-    model_params = 'multiobject_p_graspdif'
+    model_params = 'grasp_dif_multi'
     batch = 10
     ## Load model
     model_args = {
@@ -36,9 +35,8 @@ def get_approximated_grasp_diffusion_field(p, device='cpu'):
     model.set_latent(context, batch=batch)
 
     ########### 2. SET SAMPLING METHOD #############
-    generator = Grasp_AnnealedLD(model, batch=batch, T = 70, T_fit=50, k_steps=1)
+    generator = Grasp_AnnealedLD(model, batch=batch, T=70, T_fit=50, k_steps=1)
 
-    #generator.set_latent_code(obj_id)
     return generator, model
 
 

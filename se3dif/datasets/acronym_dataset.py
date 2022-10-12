@@ -1,5 +1,7 @@
 import glob
 import copy
+import time
+
 import numpy as np
 import trimesh
 
@@ -16,11 +18,11 @@ from se3dif.utils import get_data_src
 
 from se3dif.utils import to_numpy, to_torch, get_grasps_src
 from mesh_to_sdf.surface_point_cloud import get_scan_view, get_hq_scan_view
+from mesh_to_sdf.scan import ScanPointcloud
+
+
 
 import os, sys
-
-
-os.environ["PYOPENGL_PLATFORM"] = "egl"
 
 import logging
 logger = logging.getLogger("trimesh")
@@ -437,7 +439,7 @@ class PartialPointcloudAcronymAndSDFDataset(Dataset):
     def __init__(self, class_type=['Cup', 'Mug', 'Fork', 'Hat', 'Bottle'],
                  se3=False, phase='train', one_object=False,
                  n_pointcloud = 1000, n_density = 200, n_coords = 1000,
-                 augmented_rotation=True, visualize=False, split = True):
+                 augmented_rotation=True, visualize=False, split = True, test_files=None):
 
         self.class_type = class_type
         self.data_dir = get_data_src()
@@ -461,9 +463,12 @@ class PartialPointcloudAcronymAndSDFDataset(Dataset):
         test_size  =  n - train_size
 
         self.train_grasp_files, self.test_grasp_files = torch.utils.data.random_split(self.grasp_files, [train_size, test_size])
-
         self.type = 'train'
         self.len = len(self.train_grasp_files)
+
+        if test_files is not None:
+            self.test_grasp_files = test_files
+            self.set_test_data()
 
         self.n_pointcloud = n_pointcloud
         self.n_density  = n_density
@@ -477,6 +482,9 @@ class PartialPointcloudAcronymAndSDFDataset(Dataset):
         ## Visualization
         self.visualize = visualize
         self.scale = 8.
+
+        ## Sampler
+        self.scan_pointcloud = ScanPointcloud()
 
     def __len__(self):
         return self.len
@@ -516,7 +524,21 @@ class PartialPointcloudAcronymAndSDFDataset(Dataset):
 
     def _get_mesh_pcl(self, grasp_obj):
         mesh = grasp_obj.load_mesh()
-        return get_hq_scan_view(mesh)
+        ## 1. Mesh Centroid ##
+        centroid = mesh.centroid
+        H = np.eye(4)
+        H[:3, -1] = -centroid
+        mesh.apply_transform(H)
+        ######################
+        #time0 = time.time()
+        P = self.scan_pointcloud.get_hq_scan_view(mesh)
+        #print('Sample takes {} s'.format(time.time() - time0))
+        P +=centroid
+        try:
+            rix = np.random.randint(low=0, high=P.shape[0], size=self.n_pointcloud)
+        except:
+            print('here')
+        return P[rix, :]
 
     def _get_item(self, index):
         if self.one_object:

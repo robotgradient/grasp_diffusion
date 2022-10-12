@@ -8,8 +8,7 @@ See reference [1] for additional details.
 
 [[Website]](https://sites.google.com/view/se3dif/home)      [[Preprint]](https://arxiv.org/pdf/2209.03855.pdf)
 
-<img src="assets/grasp_diffusion.gif" alt="diffusion" style="width:200px;"/><img src="assets/grasp_diffusion_01.gif" alt="diffusion" style="width:200px;"/><img src="assets/grasp_diffusion_02.gif" alt="diffusion" style="width:200px;"/><img src="assets/grasp_diffusion_03.gif" alt="diffusion" style="width:200px;"/>
-
+<img src="assets/grasp_dif.gif" alt="diffusion" style="width:800px;"/>
 
 ## Installation
 
@@ -28,32 +27,24 @@ We define the source of the dataset and trained models in ```se3dif/utils/direct
 Originally, the data root folder is set in the folder in which the repository is (one folder before the repository). 
 Nevertheless, you can change it by changing ```root_directory``` in ```se3dif/utils/diretcory_utils.py```.
 
+We provide indications on how to prepare the training dataset in ```scripts/create_data```.
 
 
-In the base folder of the repository
-
+The already prepared data can be downloaded by
 ```cd ..```
-
-and download 
-1. Mugs (Grasps, Meshes, SDF, Pointcloud) [data](https://drive.google.com/file/d/1fURx7bTutANvOFvbKeo8XahT-R3A_vxH/view?usp=sharing)
-
+and download [data](https://drive.google.com/drive/folders/1ULWuYZYyFncIBqBhRMNrVOrosGGRITZU?usp=sharing).
 
 ## Trained Models
 
 In the base folder of the repository
 
 ```python
-cd .. && mkdir data/models
-cd data/models
+cd .. && mkdir data
+cd data
 sudo apt-get install git-lfs
 git lfs install
-git clone  https://huggingface.co/camusean/grasp_diffusion point_graspdif
+git clone  https://huggingface.co/camusean/grasp_diffusion models
 ```
-
-Alternatively, Download the trained models and unzip the folder in the before the ```root_directory```.
-You can download from Google Drive
-1. Pointcloud conditioned SE(3) GraspDiffusion model [PointGraspDif](https://drive.google.com/file/d/1Y0ZWAhs0GSL7A-J3yA7ts3N8TnQTGHon/view?usp=sharing)
-
 
 ## Sample examples
 

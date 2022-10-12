@@ -7,8 +7,7 @@ from se3dif.samplers import ApproximatedGrasp_AnnealedLD, Grasp_AnnealedLD
 from se3dif.utils import to_numpy, to_torch
 import configargparse
 
-
-from mesh_to_sdf.surface_point_cloud import get_scan_view, get_hq_scan_view
+from mesh_to_sdf.scan import ScanPointcloud
 
 device = 'cpu'
 
@@ -16,17 +15,16 @@ def parse_args():
     p = configargparse.ArgumentParser()
     p.add('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
 
-    p.add_argument('--obj_id', type=str, default='0')
+    p.add_argument('--obj_id', type=str, default='1')
     p.add_argument('--n_grasps', type=str, default='200')
-    p.add_argument('--obj_class', type=str, default='Mug')
+    p.add_argument('--obj_class', type=str, default='Cup')
 
     opt = p.parse_args()
     return opt
 
 
 def get_approximated_grasp_diffusion_field(p, device='cpu'):
-    model_params = 'point_graspdif'
-    model_params = 'multiobject_p_graspdif'
+    model_params = 'multiobject_partialp_graspdif'
     batch = 10
     ## Load model
     model_args = {
@@ -49,7 +47,14 @@ def sample_pointcloud(obj_id=0, obj_class='Mug'):
     acronym_grasps = AcronymGraspsDirectory(data_type=obj_class)
     mesh = acronym_grasps.avail_obj[obj_id].load_mesh()
 
-    P = get_hq_scan_view(mesh, bounding_radius=1)
+    centroid = mesh.centroid
+    H = np.eye(4)
+    H[:3,-1] = -centroid
+    mesh.apply_transform(H)
+
+    scan_pointcloud = ScanPointcloud()
+    P = scan_pointcloud.get_hq_scan_view(mesh)
+
 
     P *= 8.
     P_mean = np.mean(P, 0)
