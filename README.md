@@ -20,10 +20,9 @@ Activate the environment and install the library
 ```python
 conda activate se3dif_env && pip install -e .
 ```
-Install ```mesh_to_sdf```
+Clone https://github.com/TheCamusean/mesh_to_sdf and install
 ```python
-git clone https://github.com/TheCamusean/mesh_to_sdf
-cd mesh_to_sdf && pip install -e .
+pip install -e .
 ```
 
 ## Processed Data
