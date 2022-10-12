@@ -32,6 +32,14 @@ cd mesh_to_sdf && pip install -e .
 We define the source of the dataset and trained models in ```se3dif/utils/directory_utils.py```
 Originally, the data root folder is set in the folder in which the repository is (one folder before the repository). 
 Nevertheless, you can change it by changing ```root_directory``` in ```se3dif/utils/diretcory_utils.py```.
+
+We provide indications on how to prepare the training dataset in ```scripts/create_data```.
+
+
+The already prepared data can be downloaded by
+```cd ..```
+and download [data](https://drive.google.com/drive/folders/1ULWuYZYyFncIBqBhRMNrVOrosGGRITZU?usp=sharing).
+
 ```
 root
 └─── data
@@ -43,15 +51,7 @@ root
 │   │   │ graspdif_model_1
 │ 
 └─── grasp_diffusion
-
 ```
-
-We provide indications on how to prepare the training dataset in ```scripts/create_data```.
-
-
-The already prepared data can be downloaded by
-```cd ..```
-and download [data](https://drive.google.com/drive/folders/1ULWuYZYyFncIBqBhRMNrVOrosGGRITZU?usp=sharing).
 
 ## Trained Models
 
