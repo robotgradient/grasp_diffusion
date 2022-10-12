@@ -37,7 +37,7 @@ root
 │   │   grasps
 │   │   meshes
 │   │   sdf
-│   └─── models (Check below in Trained Models)
+│   └─── models
 │   │   │ graspdif_model_0
 │   │   │ graspdif_model_1
 │ 
