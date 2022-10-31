@@ -25,7 +25,7 @@ Clone https://github.com/TheCamusean/mesh_to_sdf and install
 pip install -e .
 ```
 #### Installation Issues
-1. ```pip install theseus-ai``` not working
+1. ```pip install theseus-ai``` not working.
 I suggest trying to install Theseus from source https://github.com/AI-App/Theseus
 
 
