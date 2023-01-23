@@ -104,14 +104,14 @@ class AcronymAndSDFDataset(Dataset):
 
         self.class_type = class_type
         self.data_dir = get_data_src()
-        self.acronym_data_dir = os.path.join(self.data_dir, 'acronym')
+        self.acronym_data_dir = self.data_dir
 
         self.grasps_dir = os.path.join(self.acronym_data_dir, 'grasps')
         self.sdf_dir = os.path.join(self.acronym_data_dir, 'sdf')
 
         self.generated_points_dir = os.path.join(self.acronym_data_dir, 'train_data')
 
-        grasps_files = sorted(glob.glob(self.grasps_dir+'/'+class_type+'*.h5'))
+        grasps_files = sorted(glob.glob(self.grasps_dir+'/'+class_type+'/*.h5'))
 
         points_files = []
         sdf_files = []
