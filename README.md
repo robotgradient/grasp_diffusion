@@ -102,7 +102,7 @@ python scripts/train/train_partial_pointcloud_6d_grasp_diffusion.py
 
 ## References
 
-[1] Julen Urain*, Niklas Funk*, Georgia Chalvatzaki, Jan Peters. 
+[1] Julen Urain*, Niklas Funk*, Jan Peters, Georgia Chalvatzaki. 
 "SE(3)-DiffusionFields: Learning smooth cost functions for joint grasp and motion optimization through diffusion" 
 ICRA 2023.
 [[arxiv]](https://arxiv.org/pdf/2209.03855.pdf)
@@ -110,7 +110,7 @@ ICRA 2023.
 ```
 @article{urain2022se3dif,
   title={SE(3)-DiffusionFields: Learning smooth cost functions for joint grasp and motion optimization through diffusion},
-  author={Urain, Julen and Funk, Niklas and Chalvatzaki, Georgia and Peters, Jan},
+  author={Urain, Julen and Funk, Niklas and Peters, Jan and Chalvatzaki, Georgia},
   journal={IEEE International Conference on Robotics and Automation (ICRA)},
   year={2023}
 ```
