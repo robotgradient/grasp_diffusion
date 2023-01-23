@@ -3,10 +3,9 @@ theseus-ai
 tqdm
 configargparse
 h5py
-pyglet
+pyglet==1.5
 trimesh
 matplotlib
 torchvision
 tensorboard
-mesh_to_sdf
 natsort
