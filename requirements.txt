@@ -5,7 +5,7 @@ configargparse==1.5.3
 h5py==3.7.0
 pyglet==1.5.27
 scikit-learn==1.0.2
-trimesh==2.38.42
+trimesh==3.14
 matplotlib==3.5.3
 torchvision==0.14.1
 tensorboard==2.10.0
