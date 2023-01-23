@@ -89,10 +89,6 @@ python scripts/sample/generate_partial_pointcloud_6d_grasp_poses.py --n_grasps 1
 
 ## Train a new model
 
-Train no-pointcloud model
-```azure
-python scripts/train/train_6d_grasp_diffusion.py
-```
 
 Train pointcloud conditioned model
 ```azure
@@ -108,15 +104,15 @@ python scripts/train/train_partial_pointcloud_6d_grasp_diffusion.py
 
 [1] Julen Urain*, Niklas Funk*, Georgia Chalvatzaki, Jan Peters. 
 "SE(3)-DiffusionFields: Learning smooth cost functions for joint grasp and motion optimization through diffusion" 
-*Under review* 2022.
+ICRA 2023.
 [[arxiv]](https://arxiv.org/pdf/2209.03855.pdf)
 
 ```
 @article{urain2022se3dif,
   title={SE(3)-DiffusionFields: Learning smooth cost functions for joint grasp and motion optimization through diffusion},
   author={Urain, Julen and Funk, Niklas and Chalvatzaki, Georgia and Peters, Jan},
-  journal={https://arxiv.org/pdf/2209.03855.pdf},
-  year={2022}
+  journal={IEEE International Conference on Robotics and Automation (ICRA)},
+  year={2023}
 ```
 
 [2] Eppner Clemens, Arsalan Mousavian, Dieter Fox. 
