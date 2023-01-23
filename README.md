@@ -67,7 +67,7 @@ cd .. && mkdir data
 cd data
 sudo apt-get install git-lfs
 git lfs install
-git clone https://huggingface.co/camusean/grasp_diffusion
+git clone https://huggingface.co/camusean/grasp_diffusion models
 ```
 
 ## Sample Grasps
