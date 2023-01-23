@@ -1,7 +1,6 @@
 {
   "Description" : [ "This experiment trains jointly an SDF model and a SE(3) Grasp Energy" ],
   "exp_log_dir": "multiobject_partial_graspdif",
-  "pretrained_model": "multiobject_partialp_graspdif",
   "single_object": false,
   "TrainSpecs": {
     "batch_size": 2,
