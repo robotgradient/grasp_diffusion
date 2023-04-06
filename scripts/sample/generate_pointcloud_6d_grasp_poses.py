@@ -7,7 +7,7 @@ from se3dif.samplers import ApproximatedGrasp_AnnealedLD, Grasp_AnnealedLD
 from se3dif.utils import to_numpy, to_torch
 import configargparse
 
-device = 'cpu'
+device = 'cuda:0'
 
 # Object Classes :['Cup', 'Mug', 'Fork', 'Hat', 'Bottle', 'Bowl', 'Car', 'Donut', 'Laptop', 'MousePad', 'Pencil',
 # 'Plate', 'ScrewDriver', 'WineBottle','Backpack', 'Bag', 'Banana', 'Battery', 'BeanBag', 'Bear',
@@ -44,7 +44,7 @@ def get_approximated_grasp_diffusion_field(p, args, device='cpu'):
     model.set_latent(context, batch=batch)
 
     ########### 2. SET SAMPLING METHOD #############
-    generator = Grasp_AnnealedLD(model, batch=batch, T=70, T_fit=50, k_steps=2)
+    generator = Grasp_AnnealedLD(model, batch=batch, T=70, T_fit=50, k_steps=2, device=device)
 
     return generator, model
 
