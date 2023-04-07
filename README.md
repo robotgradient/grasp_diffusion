@@ -125,6 +125,9 @@ ICRA 2023.
 "Shapenet: An information-rich 3d model repository." 
 *arXiv preprint arXiv:1512.03012*. 2015 [[arxiv]](https://arxiv.org/abs/1512.03012)
 
+## Contributions
+This code repository is the joint effort of [Julen Urain](http://robotgradient.com/) and [Niklas Funk](https://niklasfunk.com/).
+
 ### Contact
 
 If you have any questions or find any bugs, please let me know: [Julen Urain](http://robotgradient.com/) julen[at]robot-learning[dot]de
