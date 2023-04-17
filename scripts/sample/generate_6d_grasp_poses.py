@@ -31,7 +31,7 @@ def get_approximated_grasp_diffusion_field(obj_id=0):
 
     ########### 2. SET SAMPLING METHOD #############
     #generator = ApproximatedGrasp_AnnealedLD(model, batch=batch, T = 30, T_fit=50)
-    generator = Grasp_AnnealedLD(model, batch=batch, T = 30, T_fit=20, k_steps=2)
+    generator = Grasp_AnnealedLD(model, batch=batch, T = 30, T_fit=20, k_steps=2, device=device)
 
     #generator.set_latent_code(obj_id)
     return generator, model

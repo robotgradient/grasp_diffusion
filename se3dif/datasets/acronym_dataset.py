@@ -91,6 +91,7 @@ class AcronymGraspsDirectory():
     def __init__(self, filename=get_grasps_src(), data_type='Mug'):
 
         grasps_files = sorted(glob.glob(filename + '/' + data_type + '/*.h5'))
+
         self.avail_obj = []
         for grasp_file in grasps_files:
             self.avail_obj.append(AcronymGrasps(grasp_file))

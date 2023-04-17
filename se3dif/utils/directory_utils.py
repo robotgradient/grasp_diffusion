@@ -7,7 +7,8 @@ base_dir = os.path.abspath(os.path.dirname(__file__)+'../../../')
 root_directory = os.path.abspath(os.path.join(base_dir, '..'))
 ## Set data directory
 data_directory = os.path.abspath(os.path.join(root_directory, 'data'))
-
+# Set directory for meshes regarding the simulation environment:
+mesh_dir = os.path.join(base_dir, 'isaac_evaluation', 'grasp_sim', 'meshes')
 
 def get_pretrained_models_src():
     directory = osp.join(data_directory,'models')
@@ -32,3 +33,7 @@ def get_root_src():
 def makedirs(dirname):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
+
+def get_mesh_src():
+    return mesh_dir
+

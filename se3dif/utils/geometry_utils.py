@@ -33,6 +33,10 @@ class SO3_R3():
         H[:, :3, -1] = self.t
         return H
 
+    # The quaternion takes the [w x y z] convention
+    def to_quaternion(self):
+        return self.R.to_quaternion()
+
     def sample(self, batch=1):
         R = SO3().rand(batch)
         t = torch.randn(batch, 3)

@@ -1,0 +1,330 @@
+<?xml version="1.0" ?>
+<robot name="panda" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<link name="world">
+	</link>
+
+	<joint name="arm_joint1" type="prismatic">
+		<parent link="world"/>
+		<child link="pris_link1"/>
+		<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		<axis xyz="1 0 0"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit lower="-1" upper="1" velocity="1e9" effort="1e9"/>
+	</joint>
+
+
+  	<link name="pris_link1">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>  
+	</link>
+
+	<joint name="arm_joint2" type="prismatic">
+		<parent link="pris_link1"/>
+		<child link="pris_link2"/>
+		<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		<axis xyz="0 1 0"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit lower="-1" upper="1" velocity="1e9" effort="1e9"/>
+	</joint>
+
+
+  	<link name="pris_link2">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>  
+	</link>
+
+
+	<joint name="arm_joint3" type="prismatic">
+		<parent link="pris_link2"/>
+		<child link="rev_linkx"/>
+		<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		<axis xyz="0 0 1"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit lower="-1" upper="1" velocity="1e9" effort="1e9"/>
+	</joint>
+
+
+  	<link name="rev_linkx">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		  <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+		</inertial>  
+	</link>
+
+
+	<joint name="rev_jointz" type="revolute">
+		<axis xyz="0 0 1"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit effort="1e9" lower="-3.14" upper="3.14" velocity="1e9"/>
+		<origin rpy="0 0 0" xyz="0.0 0.0 0.112"/>
+		<parent link="rev_linkx"/>
+		<child link="rev_linky"/>
+	</joint>
+
+
+
+  	<link name="rev_linky">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		  <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+
+		</inertial>  
+	</link>
+
+
+	<joint name="rev_jointy" type="revolute">
+		<axis xyz="0 1 0"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit effort="1e9" lower="-3.14" upper="3.14" velocity="1e9"/>
+		<origin rpy="0 0 0" xyz="0.0 0.0 -0.0"/>
+		<parent link="rev_linky"/>
+		<child link="rev_linkz"/>
+	</joint>
+
+  	<link name="rev_linkz">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>  
+	</link>
+
+
+	<joint name="rev_jointx" type="revolute">
+		<axis xyz="1 0 0"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit effort="1e9.0" lower="-3.14" upper="3.14" velocity="1e9"/>
+		<origin rpy="0 0 0" xyz="0.0 0.0 -0.0"/>
+		<parent link="rev_linkz"/>
+		<child link="rev_link_twist"/>
+	</joint>
+
+
+  	<link name="rev_link_twist">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>  
+	</link>
+
+
+	<joint name="rev_twist" type="revolute">
+		<axis xyz="0 0 1"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit effort="1e9" lower="-3.14" upper="3.14" velocity="1e9"/>
+		<origin rpy="0 0 0" xyz="0.0 -0.0 0.0"/>
+		<parent link="rev_link_twist"/>
+		<child link="rev_link1"/>
+	</joint>
+
+  	<link name="rev_link1">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		  <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+		</inertial>  
+	</link>
+
+
+
+	<joint name="rev_joint1" type="revolute">
+		<axis xyz="0 0 1"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit effort="1e9" lower="-3.14" upper="3.14" velocity="1e9"/>
+		<origin rpy="0 0 0" xyz="0.0 0.0 -0.112"/>
+		<parent link="rev_link1"/>
+		<child link="rev_link2"/>
+	</joint>
+
+  	<link name="rev_link2">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>  
+	</link>
+
+
+	<joint name="rev_joint2" type="revolute">
+		<axis xyz="0 1 0"/>
+		<limit effort="1e9" lower="-3.14" upper="3.14" velocity="1e9"/>
+		<origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+		<parent link="rev_link2"/>
+		<child link="rev_link3"/>
+	</joint>
+
+
+	<link name="rev_link3">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>  
+	</link>
+
+	<joint name="rev_joint3" type="revolute">
+		<axis xyz="1 0 0"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit effort="1e9" lower="-3.14" upper="3.14" velocity="1e9"/>
+		<origin rpy="0 0 0" xyz="0.0 0.0 -0.0"/>
+		<parent link="rev_link3"/>
+		<child link="slide_x"/>
+	</joint>
+
+	<link name="slide_x">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>  
+	</link>
+
+	<joint name="slide_jointx" type="prismatic">
+		<parent link="slide_x"/>
+		<child link="slide_y"/>
+		<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		<axis xyz="1 0 0"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit lower="-1" upper="1" velocity="1e9" effort="1e9"/>
+	</joint>
+
+
+  	<link name="slide_y">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>  
+	</link>
+
+	<joint name="slide_jointy" type="prismatic">
+		<parent link="slide_y"/>
+		<child link="slide_z"/>
+		<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		<axis xyz="0 1 0"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit lower="-1" upper="1" velocity="1e9" effort="1e9"/>
+	</joint>
+
+
+  	<link name="slide_z">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>  
+	</link>
+
+
+	<joint name="slide_jointz" type="prismatic">
+		<parent link="slide_z"/>
+		<child link="dummy_link"/>
+		<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		<axis xyz="0 0 1"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit lower="-1" upper="1" velocity="1e9" effort="1e9"/>
+	</joint>
+
+	<link name="dummy_link">
+	</link>
+
+	<joint name="dummy_joint" type="prismatic">
+		<parent link="dummy_link"/>
+		<child link="panda_hand"/>
+		<axis xyz="0 0 1"/>
+		<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit lower="-0.1" upper="0.1" velocity="1e9" effort="1e9"/>
+	</joint>
+
+
+	<link name="panda_hand">
+		<inertial>
+		  <mass value="0.001"/>
+		  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		  <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		</inertial>  
+	</link>
+
+	<joint name="panda_hand_joint" type="fixed">
+		<parent link="panda_hand"/>
+		<child link="panda_hand_vis"/>
+		<origin rpy="0.0 0.0 1.57079642071591" xyz="0.0 0.0 0.0"/>
+		<dynamics damping="10.0" friction="0.0"/>
+		<limit lower="-0.1" upper="0.1" velocity="1e9" effort="1e9"/>
+	</joint>
+
+	<link name="panda_hand_vis">
+    		<visual>
+      			<geometry>
+        			<mesh filename="hand_only/meshes/visual/hand.obj"/>
+      			</geometry>
+    		</visual>
+    		<collision>
+      			<geometry>
+        			<mesh filename="package://hand_only/meshes/collision/hand.obj"/>
+      			</geometry>
+    		</collision>
+		<inertial>
+			<mass value="1.0"/>
+			<inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>
+  	</link>
+
+	<joint name="panda_left_finger_joint" type="prismatic">
+		<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		<parent link="panda_hand_vis"/>
+		<child link="panda_left_finger_rigid"/>
+		<axis xyz="0 1 0"/>
+		<dynamics damping="100.0" friction="0.0"/>
+    		<limit lower="-0.005" upper="0.04" velocity="1e9" effort="1e9"/>
+	</joint>
+
+	<joint name="panda_right_finger_joint" type="prismatic">
+		<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+		<parent link="panda_hand_vis"/>
+		<child link="panda_right_finger_rigid"/>
+		<axis xyz="0 -1 0"/>
+		<dynamics damping="100.0" friction="0.0"/>
+    		<limit lower="-0.005" upper="0.04" velocity="1e9" effort="1e9"/>
+	</joint>
+
+	<link name="panda_left_finger_rigid"> 
+		<visual>
+			<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			<geometry>
+		        	<mesh filename="hand_only/meshes/custom/full_filled_finger.obj"/>
+      			</geometry>
+    		</visual>
+    		<collision>
+			<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+      			<geometry>
+		        	<mesh filename="hand_only/meshes/custom/full_filled_finger.obj"/>
+      			</geometry>
+    		</collision>
+		<inertial>
+			<mass value="0.05"/>
+			<inertia ixx="0.005" iyy="0.005" izz="0.005" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>
+  	</link>
+	<link name="panda_right_finger_rigid">
+		<visual>
+			<origin rpy="0.0 0.0 3.14159265359" xyz="0.0 0.0 0.0"/>
+			<geometry>
+		        	<mesh filename="hand_only/meshes/custom/full_filled_finger.obj"/>
+      			</geometry>
+    		</visual>
+    		<collision>
+			<origin rpy="0.0 0.0 3.14159265359" xyz="0.0 0.0 0.0"/>
+      			<geometry>
+		        	<mesh filename="hand_only/meshes/custom/full_filled_finger.obj"/>
+      			</geometry>
+		</collision>
+		<inertial>
+			<mass value="0.05"/>
+			<inertia ixx="0.005" iyy="0.005" izz="0.005" ixy="0.0" ixz="0.0" iyz="0.0"/>
+		</inertial>
+  	</link>
+
+</robot>

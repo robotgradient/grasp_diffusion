@@ -100,6 +100,19 @@ Train partial pointcloud conditioned model
 python scripts/train/train_partial_pointcloud_6d_grasp_diffusion.py
 ```
 
+## Evaluate Generated Grasps in Simulation (Isaac Gym) and compute Earth Moving Distance
+
+To evaluate a trained model in Isaac Gym, you first have to install the simulator and install it into your conda environment.
+Note: for our experiments, we used Isaac Gym preview3.
+
+In the file *scripts/evaluate/evaluate_pointcloud_6d_grasp_poses.py* we showcase how we evaluate the quality of the trained model
+
+```azure
+python scripts/evaluate/evaluate_pointcloud_6d_grasp_poses.py --n_grasps 100 --obj_id 0 --obj_class 'Mug' --model 'grasp_dif_mugs' --device "cuda:0"
+```
+
+
+
 ## References
 
 [1] Julen Urain*, Niklas Funk*, Jan Peters, Georgia Chalvatzaki. 
