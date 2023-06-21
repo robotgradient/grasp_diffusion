@@ -125,7 +125,7 @@ def visualize_grasps(Hs, scale=1., p_cloud=None, energies=None, colors=None, mes
             c = color[k]
             c_vis = [0, 0, int(c*254)]
         else:
-            c_vis = list(colors[k,...])
+            c_vis = list(np.array(colors[k,...]))
 
         grips.append(
             create_gripper_marker(color=c_vis, scale=scale).apply_transform(H)
@@ -151,7 +151,7 @@ def generate_mesh_grid(xmin=[-1.,-1.,-1.], xmax = [1., 1.,1.], n_points=20):
     y = torch.linspace(xmin[1], xmax[1], n_points)
     z = torch.linspace(xmin[2], xmax[2], n_points)
 
-    xx, yy, zz  = torch.meshgrid((x,y,z))
+    xx, yy, zz = torch.meshgrid((x,y,z))
 
     xyz = torch.cat((xx.reshape(-1,1), yy.reshape(-1,1), zz.reshape(-1,1),),1)
     return xyz

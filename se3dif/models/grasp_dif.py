@@ -1,6 +1,59 @@
 import torch
+import numpy as np
 import torch.nn as nn
 
+class GaussianFourierProjection(nn.Module):
+    """Gaussian random features for encoding time steps."""
+    def __init__(self, embed_dim, scale=30.):
+        super().__init__()
+        # Randomly sample weights during initialization. These weights are fixed
+        # during optimization and are not trainable.
+        self.W = nn.Parameter(torch.randn(embed_dim // 2) * scale, requires_grad=False)
+    def forward(self, x):
+        x_proj = torch.einsum('...,b->...b',x, self.W)* 2 * np.pi
+        return torch.cat([torch.sin(x_proj), torch.cos(x_proj)], dim=-1)
+
+class NaiveSE3DiffusionModel(nn.Module):
+    def __init__(self, energy=False):
+        super().__init__()
+
+        input_size = 12
+        enc_dim = 128
+        if energy:
+            output_size = 1
+        else:
+            output_size = 6
+
+        self.network = nn.Sequential(
+            nn.Linear(2*enc_dim, 128),
+            nn.ReLU(),
+            nn.Linear(128, 256),
+            nn.ReLU(),
+            nn.Linear(256, output_size)
+        )
+
+        ## Time Embedings Encoder ##
+        self.time_embed = nn.Sequential(
+            GaussianFourierProjection(embed_dim=enc_dim),
+            nn.Linear(enc_dim, enc_dim),
+            nn.SiLU(),
+        )
+        self.x_embed = nn.Sequential(
+            nn.Linear(input_size, enc_dim),
+            nn.SiLU(),
+        )
+
+    def marginal_prob_std(self, t, sigma=0.5):
+        return torch.sqrt((sigma ** (2 * t) - 1.) / (2. * np.log(sigma)))
+
+    def forward(self, x, R, k):
+        std = self.marginal_prob_std(k)
+        x_R_input = torch.cat((x, R.reshape(R.shape[0], -1)), dim=-1)
+        z = self.x_embed(x_R_input)
+        z_time = self.time_embed(k)
+        z_in = torch.cat((z, z_time),dim=-1)
+        v = self.network(z_in)
+        return v/(std[:,None].pow(2))
 
 
 class GraspDiffusionFields(nn.Module):
