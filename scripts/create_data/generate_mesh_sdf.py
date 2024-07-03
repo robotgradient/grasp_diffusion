@@ -16,7 +16,7 @@ import pyrender
 from se3dif.utils import makedirs
 
 DATA_FOLDER = 'data'
-OBJ_CLASSES = ['Cow', 'Sheep', 'Cat', 'Dog', 'Pizza', 'Elephant', 'Donkey', 'RubiksCube', 'Tank', 'Truck', 'USBStick']
+OBJ_CLASSES = ['mug']
 
 #OBJ_CLASSES = ['Bottle']
 ## Set data folder
@@ -59,23 +59,23 @@ def generate_mesh_sdf(mesh, absolute=True, normalize=False, n_points=200000):
 
 
 if __name__ == '__main__':
+    from se3dif.utils import directory_utils
+    from se3dif.datasets import acronym_dataset
+    import glob
 
     for obj_cls in OBJ_CLASSES:
-        grasp_cls_folder = os.path.join(grasps_folder, obj_cls)
+        grasp_dir = acronym_dataset.AcronymGraspsDirectory(data_type='mug')
+
         count = 0
-        for filename in os.listdir(grasp_cls_folder):
+        for g_obj in grasp_dir.avail_obj:
             try:
                 count+=1
                 print(count)
-                ## Load Acronym file
-                load_file = os.path.join(grasp_cls_folder, filename)
-                print(filename)
-                data = h5py.File(load_file, "r")
+
                 ## Load mesh
-                mesh_fname = data["object/file"][()].decode('utf-8')
-                mesh_load_file = os.path.join(data_folder, mesh_fname)
-                mesh = trimesh.load(mesh_load_file)
-                scale = data["object/scale"][()]
+                mesh_fname = g_obj.mesh_fname
+                mesh = g_obj.load_mesh()
+                scale = g_obj.mesh_scale
 
                 if type(mesh) == trimesh.scene.scene.Scene:
                     mesh = trimesh.util.concatenate(mesh.dump())
@@ -98,7 +98,7 @@ if __name__ == '__main__':
                 query_points, sdf = generate_mesh_sdf(mesh)
 
                 ## save info
-                save_sdf_folder = os.path.join(sdf_folder, mesh_type)
+                save_sdf_folder = os.path.join(directory_utils.get_sdf_src(), mesh_type)
                 makedirs(save_sdf_folder)
 
 

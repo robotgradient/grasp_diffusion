@@ -1,1 +1,1 @@
-from .grasps_sucess import GraspSuccessEvaluator
+# from .grasps_sucess import GraspSuccessEvaluator

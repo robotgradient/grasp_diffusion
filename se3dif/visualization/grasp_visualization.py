@@ -43,7 +43,14 @@ def create_gripper_marker(color=[0, 0, 255], tube_radius=0.001, sections=6, scal
         segment=[[-4.100000e-02*scale, 0, 6.59999996e-02*scale], [4.100000e-02*scale, 0, 6.59999996e-02*scale]],
     )
 
+    T_offset = np.array([
+        [0., 1., 0., 0.],
+        [-1., 0., -0., 0.],
+        [-0., 0., 1., 0.105],
+        [0., 0., 0., 1.]])
+
     tmp = trimesh.util.concatenate([cb1, cb2, cfr, cfl])
+    tmp = tmp.apply_transform(np.linalg.inv(T_offset))
     tmp.visual.face_colors = color
 
     return tmp

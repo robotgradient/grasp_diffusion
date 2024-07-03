@@ -25,6 +25,10 @@ def get_grasps_src():
     directory = osp.join(get_data_src(), 'grasps')
     return directory
 
+def get_sdf_src():
+    directory = osp.join(get_data_src(), 'sdf')
+    return directory
+
 
 def get_root_src():
     return root_directory

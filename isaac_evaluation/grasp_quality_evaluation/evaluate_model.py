@@ -1,4 +1,4 @@
-from isaac_evaluation.grasp_quality_evaluation.grasps_sucess import GraspSuccessEvaluator
+# from isaac_evaluation.grasp_quality_evaluation.grasps_sucess import GraspSuccessEvaluator
 
 from scipy.spatial.transform import Rotation as R
 
@@ -27,6 +27,10 @@ class EvaluatePointConditionedGeneratedGrasps():
 
         ## Load generator model
         self.generator = generator
+
+        # Grasp Info
+        grasps_dir = AcronymGraspsDirectory(data_type=self.obj_class)
+        self.grasp = grasps_dir.avail_obj[self.obj_id]
 
     def _set_args(self, args):
         if args is None:
@@ -106,9 +110,11 @@ class EvaluatePointConditionedGeneratedGrasps():
 
     def evaluate_grasps_success(self, H):
         ## Load grasp evaluator
-        grasp_evaluator = GraspSuccessEvaluator(n_envs=self.n_envs, idxs=[self.obj_id] * self.n_envs, obj_class=self.obj_class,
-                                                rotations=[self.q]*self.n_envs, viewer=self.viewer, enable_rel_trafo=False)
-        return grasp_evaluator.eval_set_of_grasps(H)
+
+        return False
+        # grasp_evaluator = GraspSuccessEvaluator(n_envs=self.n_envs, idxs=[self.obj_id] * self.n_envs, obj_class=self.obj_class,
+        #                                         rotations=[self.q]*self.n_envs, viewer=self.viewer, enable_rel_trafo=False)
+        # return grasp_evaluator.eval_set_of_grasps(H)
 
     def measure_empirircal_dist_distance(self, H_sample=None):
 
