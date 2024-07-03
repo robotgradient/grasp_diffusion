@@ -1,4 +1,4 @@
-numpy==1.21.6
+numpy==1.23.0
 theseus-ai==0.1.3
 tqdm==4.64.1
 configargparse==1.5.3
